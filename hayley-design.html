@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hayley — UX Strategist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f2ee;
+      --cream: #ede9e3;
+      --accent: #c8ff4a;
+      --accent2: #ff6b35;
+      --mid: #7a7672;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease;
+      transform: translate(-50%, -50%);
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.08s ease, width 0.2s, height 0.2s, opacity 0.2s;
+      transform: translate(-50%, -50%);
+      opacity: 0.5;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 24px 48px;
+      mix-blend-mode: normal;
+    }
+    nav::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.9) 0%, transparent 100%);
+      pointer-events: none;
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      color: var(--white);
+      position: relative;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links {
+      display: flex; gap: 36px; list-style: none;
+      position: relative;
+    }
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 48px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 80% 20%, rgba(200,255,74,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,107,53,0.06) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+    .hero-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3.5rem, 8vw, 8rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      max-width: 900px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.4s forwards;
+    }
+    .hero h1 em {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--mid);
+      font-family: 'DM Sans', sans-serif;
+    }
+    .hero h1 .highlight {
+      color: transparent;
+      -webkit-text-stroke: 1px var(--accent);
+    }
+    .hero-bottom {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-top: 60px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.6s forwards;
+    }
+    .hero-desc {
+      max-width: 380px;
+      font-size: 1rem;
+      color: var(--mid);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .hero-desc strong { color: var(--white); font-weight: 500; }
+    .hero-cta {
+      display: flex; gap: 16px; align-items: center;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--black);
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 16px 32px;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { background: #d4ff60; transform: translateY(-2px); }
+    .btn-ghost {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+      transition: color 0.2s;
+    }
+    .btn-ghost:hover { color: var(--white); }
+    .btn-ghost::after { content: '→'; }
+    .scroll-indicator {
+      position: absolute; bottom: 32px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1s forwards;
+    }
+    .scroll-indicator span {
+      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid);
+    }
+    .scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, var(--mid), transparent);
+      animation: scrollPulse 2s ease infinite;
+    }
+
+    /* MARQUEE */
+    .marquee-section {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .marquee-track {
+      display: inline-flex; gap: 0;
+      animation: marquee 25s linear infinite;
+    }
+    .marquee-item {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+      padding: 0 40px;
+    }
+    .marquee-item span { color: var(--accent); margin-right: 40px; }
+
+    /* SECTION BASE */
+    section { padding: 120px 48px; }
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    /* ABOUT */
+    .about { background: var(--black); }
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+      max-width: 1200px;
+    }
+    .about-left {}
+    .about-text {
+      font-size: 1.05rem;
+      color: var(--mid);
+      line-height: 1.8;
+      font-weight: 300;
+      margin-bottom: 20px;
+    }
+    .about-text strong { color: var(--white); font-weight: 500; }
+    .about-right { padding-top: 80px; }
+    .stat-block {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+    }
+    .stat-block:last-child { border-bottom: 1px solid var(--border); }
+    .stat-number {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 2.8rem;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-label { font-size: 0.85rem; color: var(--mid); }
+
+    /* SERVICES */
+    .services { background: #0f0f0f; }
+    .services-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 64px;
+      max-width: 1200px;
+    }
+    .services-header p {
+      max-width: 340px;
+      color: var(--mid);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      max-width: 1200px;
+    }
+    .service-card {
+      background: #141414;
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .service-card:hover { background: #1a1a1a; }
+    .service-card.featured {
+      background: var(--accent);
+      grid-column: span 1;
+    }
+    .service-card.featured * { color: var(--black) !important; }
+    .service-card.featured .service-icon { border-color: rgba(0,0,0,0.15); }
+    .service-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--mid);
+      margin-bottom: 32px;
+    }
+    .service-icon {
+      width: 48px; height: 48px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 28px;
+    }
+    .service-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
+    .service-desc {
+      font-size: 0.88rem;
+      color: var(--mid);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .service-tag {
+      display: inline-block;
+      margin-top: 24px;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(200,255,74,0.3);
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+    .service-card.featured .service-tag {
+      color: var(--black);
+      border-color: rgba(0,0,0,0.2);
+    }
+
+    /* PROCESS */
+    .process { background: var(--black); }
+    .process-inner { max-width: 1200px; }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      margin-top: 64px;
+    }
+    .process-step {
+      padding: 40px 32px;
+      border-top: 1px solid var(--border);
+      position: relative;
+    }
+    .process-step-num {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 3rem;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,0.1);
+      line-height: 1;
+      margin-bottom: 24px;
+    }
+    .process-step-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
+    .process-step-desc {
+      font-size: 0.85rem;
+      color: var(--mid);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* WHO I WORK WITH */
+    .who { background: #0f0f0f; }
+    .who-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      max-width: 1200px;
+    }
+    .client-types {
+      display: flex; flex-direction: column; gap: 2px;
+      margin-top: 40px;
+    }
+    .client-type {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 24px 0;
+      border-top: 1px solid var(--border);
+      font-size: 1rem;
+      font-weight: 300;
+    }
+    .client-type:last-child { border-bottom: 1px solid var(--border); }
+    .client-type-name { color: var(--white); font-weight: 500; }
+    .client-type-tag {
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+    .who-right { padding-top: 40px; }
+    .who-quote {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+      margin-bottom: 32px;
+    }
+    .who-quote em {
+      font-style: italic;
+      font-weight: 400;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--mid);
+    }
+    .who-body {
+      font-size: 0.95rem;
+      color: var(--mid);
+      line-height: 1.8;
+      font-weight: 300;
+    }
+    .who-body strong { color: var(--white); font-weight: 500; }
+
+    /* CONTACT */
+    .contact {
+      background: var(--accent);
+      padding: 120px 48px;
+    }
+    .contact-inner {
+      max-width: 1200px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .contact h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      color: var(--black);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .contact h2 em {
+      font-style: italic;
+      font-weight: 400;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .contact-sub {
+      color: rgba(0,0,0,0.55);
+      font-size: 1rem;
+      margin-top: 20px;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-field label {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.5);
+      font-weight: 500;
+    }
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      background: rgba(0,0,0,0.08);
+      border: 1.5px solid rgba(0,0,0,0.15);
+      border-radius: 2px;
+      padding: 14px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--black);
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    .form-field input::placeholder,
+    .form-field textarea::placeholder { color: rgba(0,0,0,0.35); }
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus { border-color: rgba(0,0,0,0.4); }
+    .form-field textarea { resize: vertical; min-height: 120px; }
+    .form-submit {
+      background: var(--black);
+      color: var(--accent);
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      padding: 18px 40px;
+      border-radius: 2px;
+      cursor: none;
+      align-self: flex-start;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .form-submit:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    /* FOOTER */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--border);
+      padding: 40px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--white);
+    }
+    .footer-logo span { color: var(--accent); }
+    .footer-copy {
+      font-size: 0.78rem;
+      color: var(--mid);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.1); }
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      section { padding: 80px 24px; }
+      .hero { padding: 0 24px 60px; }
+      .hero-bottom { flex-direction: column; gap: 32px; align-items: flex-start; }
+      .about-inner, .who-inner, .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+      .services-header { flex-direction: column; gap: 16px; align-items: flex-start; }
+      .services-grid { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">H<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-label">UX Strategist & Product Thinker</div>
+  <h1>
+    I help teams build<br/>
+    <em>the right thing</em><br/>
+    <span class="highlight">before</span> they build it.
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-desc">
+      <strong>Strategy-first UX</strong> for startups and growing companies. I dig into your users, your systems, and your goals — then map a clear path forward.
+    </p>
+    <div class="hero-cta">
+      <a href="#contact" class="btn-primary">Work with me</a>
+      <a href="#services" class="btn-ghost">See services</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">UX Strategy <span>✦</span></span>
+    <span class="marquee-item">Product Thinking <span>✦</span></span>
+    <span class="marquee-item">User Research <span>✦</span></span>
+    <span class="marquee-item">Systems Design <span>✦</span></span>
+    <span class="marquee-item">UX Audit <span>✦</span></span>
+    <span class="marquee-item">Journey Mapping <span>✦</span></span>
+    <span class="marquee-item">Wireframing <span>✦</span></span>
+    <span class="marquee-item">UX Strategy <span>✦</span></span>
+    <span class="marquee-item">Product Thinking <span>✦</span></span>
+    <span class="marquee-item">User Research <span>✦</span></span>
+    <span class="marquee-item">Systems Design <span>✦</span></span>
+    <span class="marquee-item">UX Audit <span>✦</span></span>
+    <span class="marquee-item">Journey Mapping <span>✦</span></span>
+    <span class="marquee-item">Wireframing <span>✦</span></span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner fade-in">
+    <div class="about-left">
+      <div class="section-label">About</div>
+      <h2 class="section-title">Design is a tool.<br/>Strategy is the work.</h2>
+      <p class="about-text">
+        I'm a UX strategist with a background in product design. I've worked across startups and enterprises — which means I understand both the scrappiness of figuring things out fast <strong>and</strong> the complexity of systems that have to scale.
+      </p>
+      <p class="about-text">
+        My work starts with a question: <strong>are you solving the right problem?</strong> Before a pixel gets placed, I want to understand your users, your business model, and where the gaps are between the two.
+      </p>
+      <p class="about-text">
+        Design comes in when we know what we're building — and why it matters.
+      </p>
+    </div>
+    <div class="about-right">
+      <div class="stat-block">
+        <div class="stat-number">5+</div>
+        <div class="stat-label">Years across startups & enterprise</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-number">End-to-end</div>
+        <div class="stat-label">From research to shipped product</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-number">Cross-dept</div>
+        <div class="stat-label">Comfortable with stakeholders at every level</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-header fade-in">
+    <div>
+      <div class="section-label">Services</div>
+      <h2 class="section-title">What I do</h2>
+    </div>
+    <p>Every engagement starts with strategy. Design is available when you need it — but it's never the starting point.</p>
+  </div>
+  <div class="services-grid fade-in">
+    <div class="service-card featured">
+      <div class="service-num">01</div>
+      <div class="service-icon">◈</div>
+      <div class="service-name">UX Strategy & Consulting</div>
+      <div class="service-desc">Big picture thinking about your product, your users, and where the gaps are. I help you figure out what to build — and what to stop building.</div>
+      <span class="service-tag">Most popular</span>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02</div>
+      <div class="service-icon">⊙</div>
+      <div class="service-name">UX Audit</div>
+      <div class="service-desc">A deep-dive into your existing product. I identify friction, prioritize issues by business impact, and deliver a clear, actionable report.</div>
+      <span class="service-tag">Fixed scope</span>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03</div>
+      <div class="service-icon">◎</div>
+      <div class="service-name">User Research</div>
+      <div class="service-desc">Interviews, journey mapping, and synthesis that turns real user behavior into strategic insight your whole team can act on.</div>
+      <span class="service-tag">Evidence-based</span>
+    </div>
+    <div class="service-card">
+      <div class="service-num">04</div>
+      <div class="service-icon">⊞</div>
+      <div class="service-name">Wireframing & Prototyping</div>
+      <div class="service-desc">Translating strategy into structure. Low and mid-fidelity wireframes that communicate flows and decisions — ready for your dev team.</div>
+      <span class="service-tag">Strategy-led</span>
+    </div>
+    <div class="service-card">
+      <div class="service-num">05</div>
+      <div class="service-icon">✦</div>
+      <div class="service-name">UI / Visual Design</div>
+      <div class="service-desc">High-fidelity design when you need it. Clean, intentional interfaces built on a strategic foundation — not just made to look good.</div>
+      <span class="service-tag">Add-on</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="process-inner fade-in">
+    <div class="section-label">How I work</div>
+    <h2 class="section-title">Strategy first,<br/>always.</h2>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="process-step-num">01</div>
+        <div class="process-step-title">Discover</div>
+        <div class="process-step-desc">I get into your world — your users, your business goals, your existing systems. What's working, what isn't, and why.</div>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">02</div>
+        <div class="process-step-title">Diagnose</div>
+        <div class="process-step-desc">I map the gaps between user needs and business outcomes. This is where we figure out what the real problem actually is.</div>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">03</div>
+        <div class="process-step-title">Define</div>
+        <div class="process-step-desc">A clear strategic direction — prioritized, justified, and connected to outcomes your stakeholders can get behind.</div>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">04</div>
+        <div class="process-step-title">Design</div>
+        <div class="process-step-desc">Wireframes, prototypes, and visuals that bring the strategy to life. Every decision has a reason behind it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO -->
+<section class="who" id="who">
+  <div class="who-inner fade-in">
+    <div class="who-left">
+      <div class="section-label">Who I work with</div>
+      <h2 class="section-title">Built for teams who are figuring it out.</h2>
+      <div class="client-types">
+        <div class="client-type">
+          <span class="client-type-name">Early-stage startups</span>
+          <span class="client-type-tag">Pre-product/market fit</span>
+        </div>
+        <div class="client-type">
+          <span class="client-type-name">Funded startups</span>
+          <span class="client-type-tag">Series A+</span>
+        </div>
+        <div class="client-type">
+          <span class="client-type-name">Small businesses</span>
+          <span class="client-type-tag">Scaling digital</span>
+        </div>
+        <div class="client-type">
+          <span class="client-type-name">Enterprises</span>
+          <span class="client-type-tag">Complex systems</span>
+        </div>
+      </div>
+    </div>
+    <div class="who-right">
+      <p class="who-quote">
+        You don't need someone to make things pretty.<br/>
+        <em>You need someone to figure out what to make.</em>
+      </p>
+      <p class="who-body">
+        I work best with teams who have real problems and want a strategic partner — not just an executor. Whether you're validating an idea, untangling a broken flow, or trying to understand why users keep dropping off, <strong>I help you see the full picture</strong> before you commit to building anything.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="fade-in">
+      <h2>Let's figure it<br/><em>out together.</em></h2>
+      <p class="contact-sub">Tell me what you're working on. I'll get back to you within 48 hours.</p>
+    </div>
+    <div class="contact-form fade-in">
+      <div class="form-row">
+        <div class="form-field">
+          <label>Name</label>
+          <input type="text" placeholder="Your name" />
+        </div>
+        <div class="form-field">
+          <label>Email</label>
+          <input type="email" placeholder="your@email.com" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Company / Project</label>
+        <input type="text" placeholder="Where are you building?" />
+      </div>
+      <div class="form-field">
+        <label>What do you need?</label>
+        <select>
+          <option value="" disabled selected>Select a service</option>
+          <option>UX Strategy & Consulting</option>
+          <option>UX Audit</option>
+          <option>User Research</option>
+          <option>Wireframing & Prototyping</option>
+          <option>UI / Visual Design</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Tell me more</label>
+        <textarea placeholder="What's the problem you're trying to solve? What does success look like?"></textarea>
+      </div>
+      <button class="form-submit">Send it →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">H<span>.</span></div>
+  <div class="footer-copy">© 2026 · Strategy-first UX</div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+  document.querySelectorAll('a, button, input, textarea, select').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%, -50%) scale(2)';
+      ring.style.width = '56px'; ring.style.height = '56px'; ring.style.opacity = '0.3';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+      ring.style.width = '36px'; ring.style.height = '36px'; ring.style.opacity = '0.5';
+    });
+  });
+
+  // Scroll fade-in
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

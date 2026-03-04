@@ -59,13 +59,13 @@
       z-index: 100;
       display: flex; justify-content: space-between; align-items: center;
       padding: 24px 48px;
-      mix-blend-mode: normal;
     }
     nav::before {
       content: '';
       position: absolute; inset: 0;
       background: linear-gradient(to bottom, rgba(10,10,10,0.9) 0%, transparent 100%);
       pointer-events: none;
+      z-index: -1;
     }
     .nav-logo {
       font-family: 'Syne', sans-serif;
@@ -95,10 +95,17 @@
     /* HERO */
     .hero {
       min-height: 100vh;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 0 48px 80px;
+      display: flex; flex-direction: column;
+      padding: 0 48px 120px;
       position: relative;
       overflow: hidden;
+    }
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      flex: 1;
+      padding-top: 120px;
     }
     .hero-bg {
       position: absolute; inset: 0;
@@ -118,7 +125,8 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 24px;
+      margin-top: 20px;
+      margin-bottom: 16px;
       opacity: 0;
       animation: fadeUp 0.8s ease 0.2s forwards;
     }
@@ -143,8 +151,9 @@
       -webkit-text-stroke: 1px var(--accent);
     }
     .hero-bottom {
-      display: flex; justify-content: space-between; align-items: flex-end;
-      margin-top: 60px;
+      display: flex; flex-direction: column; align-items: flex-start; gap: 28px;
+      margin-top: 24px;
+      margin-bottom: 24px;
       opacity: 0;
       animation: fadeUp 0.8s ease 0.6s forwards;
     }
@@ -185,11 +194,12 @@
     .btn-ghost:hover { color: var(--white); }
     .btn-ghost::after { content: '→'; }
     .scroll-indicator {
-      position: absolute; bottom: 32px; left: 50%;
+      position: absolute; bottom: 40px; left: 50%;
       transform: translateX(-50%);
       display: flex; flex-direction: column; align-items: center; gap: 8px;
       opacity: 0;
       animation: fadeUp 0.8s ease 1s forwards;
+      z-index: 2;
     }
     .scroll-indicator span {
       font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid);
@@ -290,67 +300,70 @@
       font-weight: 300;
     }
     .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
+      display: flex;
+      flex-direction: column;
       max-width: 1200px;
     }
     .service-card {
-      background: #141414;
-      padding: 48px 40px;
+      display: grid;
+      grid-template-columns: 56px 1fr 200px;
+      gap: 48px;
+      align-items: start;
+      padding: 48px 0;
+      border-top: 1px solid var(--border);
       position: relative;
-      overflow: hidden;
       transition: background 0.3s;
     }
-    .service-card:hover { background: #1a1a1a; }
-    .service-card.featured {
-      background: var(--accent);
-      grid-column: span 1;
+    .service-card:last-child { border-bottom: 1px solid var(--border); }
+    .service-card.featured { background: transparent; }
+    .service-card.featured * { color: inherit !important; }
+    .service-card.featured .service-icon { border-color: var(--accent); color: var(--accent); }
+    .service-card.featured .service-name { color: var(--accent); }
+    .service-card.featured .service-tag {
+      color: var(--accent);
+      border-color: rgba(200,255,74,0.3);
     }
-    .service-card.featured * { color: var(--black) !important; }
-    .service-card.featured .service-icon { border-color: rgba(0,0,0,0.15); }
     .service-num {
       font-family: 'Syne', sans-serif;
       font-size: 0.7rem;
+      font-weight: 800;
       letter-spacing: 0.2em;
-      color: var(--mid);
-      margin-bottom: 32px;
+      color: rgba(255,255,255,0.15);
+      padding-top: 6px;
     }
-    .service-icon {
-      width: 48px; height: 48px;
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem;
-      margin-bottom: 28px;
-    }
+    .service-icon { display: none; }
+    .service-body {}
     .service-name {
       font-family: 'Syne', sans-serif;
       font-weight: 700;
-      font-size: 1.2rem;
-      margin-bottom: 16px;
-      letter-spacing: -0.01em;
+      font-size: clamp(1.3rem, 2vw, 1.7rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
+      line-height: 1.1;
     }
     .service-desc {
-      font-size: 0.88rem;
+      font-size: 0.92rem;
       color: var(--mid);
-      line-height: 1.7;
+      line-height: 1.75;
       font-weight: 300;
+      max-width: 560px;
     }
     .service-tag {
       display: inline-block;
-      margin-top: 24px;
+      align-self: start;
+      margin-top: 6px;
       font-size: 0.68rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid rgba(200,255,74,0.3);
-      padding: 4px 12px;
+      color: var(--mid);
+      border: 1px solid var(--border);
+      padding: 6px 16px;
       border-radius: 100px;
+      white-space: nowrap;
     }
-    .service-card.featured .service-tag {
-      color: var(--black);
-      border-color: rgba(0,0,0,0.2);
+    @media (max-width: 900px) {
+      .service-card { grid-template-columns: 40px 1fr; gap: 24px; }
+      .service-tag { display: none; }
     }
 
     /* PROCESS */
@@ -372,7 +385,7 @@
       font-weight: 800;
       font-size: 3rem;
       color: transparent;
-      -webkit-text-stroke: 1px rgba(255,255,255,0.1);
+      -webkit-text-stroke: 1px rgba(255,255,255,0.25);
       line-height: 1;
       margin-bottom: 24px;
     }
@@ -563,6 +576,249 @@
       transform: translateY(0);
     }
 
+    /* WORK SECTION */
+    .work { background: var(--black); }
+    .work-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 80px;
+      max-width: 1200px;
+    }
+    .work-header p {
+      max-width: 320px;
+      color: var(--mid);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .work-list {
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+    }
+    .work-item {
+      display: grid;
+      grid-template-columns: 320px 1fr auto;
+      gap: 56px;
+      align-items: start;
+      padding: 48px 0;
+      border-top: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .work-item:last-child { border-bottom: 1px solid var(--border); }
+    .work-item:hover .work-item-arrow { transform: translate(4px, -4px); color: var(--accent); }
+    .work-item:hover .work-item-num { color: var(--accent); }
+    .work-item-thumb {
+      width: 100%;
+      aspect-ratio: 16/10;
+      border-radius: 4px;
+      background: #1e1e1e;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .work-item-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+    }
+    .work-item:hover .work-item-thumb img { opacity: 1; }
+    .thumb-placeholder {
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+      text-align: center;
+      line-height: 1.8;
+    }
+    .work-item-content { display: flex; flex-direction: column; gap: 12px; padding-top: 4px; }
+    .work-item-num {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.15);
+      letter-spacing: 0.15em;
+      transition: color 0.3s;
+    }
+    .work-item-tags {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .work-tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+      border: 1px solid var(--border);
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+    .work-item-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.4rem, 2vw, 1.9rem);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+    .work-item-desc {
+      font-size: 0.92rem;
+      color: var(--mid);
+      line-height: 1.75;
+      font-weight: 300;
+      max-width: 480px;
+    }
+    .work-item-arrow {
+      font-size: 1.4rem;
+      color: var(--mid);
+      transition: transform 0.3s, color 0.3s;
+      padding-top: 4px;
+    }
+    @media (max-width: 900px) {
+      .work-item { grid-template-columns: 1fr; gap: 24px; }
+      .work-item-arrow { display: none; }
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 200;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 40px 24px;
+      overflow-y: auto;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+      backdrop-filter: blur(8px);
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: #141414;
+      max-width: 860px;
+      width: 100%;
+      border: 1px solid var(--border);
+      transform: translateY(32px);
+      transition: transform 0.3s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-header {
+      padding: 48px 48px 40px;
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .modal-close {
+      background: none; border: none;
+      color: var(--mid); font-size: 1.4rem;
+      cursor: none; line-height: 1;
+      transition: color 0.2s;
+      padding: 0;
+    }
+    .modal-close:hover { color: var(--white); }
+    .modal-tags { display: flex; gap: 8px; margin-bottom: 16px; }
+    .modal-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    .modal-body { padding: 48px; }
+    .modal-section { margin-bottom: 40px; }
+    .modal-section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .modal-section-text {
+      font-size: 0.95rem;
+      color: var(--mid);
+      line-height: 1.8;
+      font-weight: 300;
+    }
+    .modal-section-text strong { color: var(--white); font-weight: 500; }
+    .modal-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 40px;
+    }
+    .modal-pill-list {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-top: 12px;
+    }
+    .modal-pill {
+      font-size: 0.75rem;
+      color: var(--white);
+      background: rgba(255,255,255,0.06);
+      padding: 6px 14px;
+      border-radius: 100px;
+    }
+    .modal-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent);
+      color: var(--black);
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 2px;
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+    .modal-cta:hover { background: #d4ff60; }
+
+    .modal-image-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-bottom: 40px;
+    }
+    .modal-image-strip.single { grid-template-columns: 1fr; }
+    .modal-img {
+      aspect-ratio: 16/9;
+      background: #1a1a1a;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .modal-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .modal-img .img-placeholder {
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      color: rgba(255,255,255,0.15);
+    }
+    .modal-img .img-placeholder-icon { font-size: 2rem; }
+    .modal-img .img-placeholder-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .modal-img-caption {
+      font-size: 0.72rem;
+      color: var(--mid);
+      letter-spacing: 0.05em;
+      padding: 10px 0 0;
+    }
+    .modal-img-wrap { display: flex; flex-direction: column; }
+
+    @media (max-width: 700px) {
+      .modal-image-strip { grid-template-columns: 1fr; }
+      .work-item-thumb { display: none; }
+    }
+      .work-item-num { display: none; }
+      .work-item-arrow { justify-self: start; }
+      .modal-header { padding: 32px 24px; }
+      .modal-body { padding: 32px 24px; }
+      .modal-two-col { grid-template-columns: 1fr; gap: 24px; }
+    }
+
     @media (max-width: 900px) {
       nav { padding: 20px 24px; }
       .nav-links { display: none; }
@@ -588,6 +844,7 @@
   <a href="#" class="nav-logo">Through<span>line</span></a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
+    <li><a href="#work">Work</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#process">Process</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -598,19 +855,21 @@
 <section class="hero" id="home">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
-  <div class="hero-label">UX Strategy & Product Thinking</div>
-  <h1>
-    Where chaos<br/>
-    <em>finds its</em><br/>
-    <span class="highlight">shape.</span>
-  </h1>
-  <div class="hero-bottom">
-    <p class="hero-desc">
+  <div class="hero-content">
+    <h1>
+      Where chaos<br/>
+      <em>finds its</em><br/>
+      <span class="highlight">shape.</span>
+    </h1>
+    <div class="hero-label">UX Strategy & Product Thinking</div>
+    <div class="hero-bottom">
+      <p class="hero-desc">
         We help product teams turn <strong>complexity into clear direction.</strong> Strategy-first UX for startups and growing companies — before a single pixel gets placed.
       </p>
-    <div class="hero-cta">
-      <a href="#contact" class="btn-primary">Work with me</a>
-      <a href="#services" class="btn-ghost">See services</a>
+      <div class="hero-cta">
+        <a href="#contact" class="btn-primary">Work with me</a>
+        <a href="#services" class="btn-ghost">See services</a>
+      </div>
     </div>
   </div>
   <div class="scroll-indicator">
@@ -636,6 +895,253 @@
     <span class="marquee-item">UX Audit <span>✦</span></span>
     <span class="marquee-item">Journey Mapping <span>✦</span></span>
     <span class="marquee-item">Wireframing <span>✦</span></span>
+  </div>
+</div>
+
+<!-- WORK -->
+<section class="work" id="work">
+  <div class="work-header fade-in">
+    <div>
+      <div class="section-label">Selected Work</div>
+      <h2 class="section-title">Problems solved.<br/>Chaos shaped.</h2>
+    </div>
+    <p>A mix of strategy, research, and design — each project started with a problem worth solving.</p>
+  </div>
+  <div class="work-list fade-in">
+
+    <div class="work-item" onclick="openModal('equitrust')">
+      <div class="work-item-thumb">
+        <!-- Replace with: <img src="your-image.jpg" alt="Agent Portal" /> -->
+        <div class="thumb-placeholder">Add image here</div>
+      </div>
+      <div class="work-item-content">
+        <div class="work-item-num">01</div>
+        <div class="work-item-tags">
+          <span class="work-tag">UX Strategy</span>
+          <span class="work-tag">User Research</span>
+          <span class="work-tag">Journey Mapping</span>
+        </div>
+        <div class="work-item-name">Agent Portal Redesign</div>
+        <div class="work-item-desc">Untangling a fragmented insurance portal used by thousands of independent agents — starting with the question no one had asked: what do agents actually need first?</div>
+      </div>
+      <div class="work-item-arrow">↗</div>
+    </div>
+
+    <div class="work-item" onclick="openModal('stockguard')">
+      <div class="work-item-thumb">
+        <!-- Replace with: <img src="your-image.jpg" alt="Stockguard" /> -->
+        <div class="thumb-placeholder">Add image here</div>
+      </div>
+      <div class="work-item-content">
+        <div class="work-item-num">02</div>
+        <div class="work-item-tags">
+          <span class="work-tag">UX Audit</span>
+          <span class="work-tag">UI Redesign</span>
+          <span class="work-tag">Web App</span>
+        </div>
+        <div class="work-item-name">Stockguard Web App Redesign</div>
+        <div class="work-item-desc">A livestock insurance platform that worked, but barely. Took initiative to redesign the experience from the ground up — no client brief, just a broken product and a better way forward.</div>
+      </div>
+      <div class="work-item-arrow">↗</div>
+    </div>
+
+    <div class="work-item" onclick="openModal('lotslive')">
+      <div class="work-item-thumb">
+        <!-- Replace with: <img src="your-image.jpg" alt="Lots Live" /> -->
+        <div class="thumb-placeholder">Add image here</div>
+      </div>
+      <div class="work-item-content">
+        <div class="work-item-num">03</div>
+        <div class="work-item-tags">
+          <span class="work-tag">Mobile App</span>
+          <span class="work-tag">User Research</span>
+          <span class="work-tag">Prototyping</span>
+        </div>
+        <div class="work-item-name">Lots Live — Parking App</div>
+        <div class="work-item-desc">Real-time parking availability for college campuses. Turned a daily frustration into a seamless mobile experience through research, card sorting, and iterative testing.</div>
+      </div>
+      <div class="work-item-arrow">↗</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-equitrust" onclick="closeModalOnOverlay(event, 'equitrust')">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-tags">
+          <span class="work-tag">UX Strategy</span>
+          <span class="work-tag">User Research</span>
+          <span class="work-tag">Journey Mapping</span>
+        </div>
+        <div class="modal-title">Agent Portal Redesign</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('equitrust')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-image-strip">
+        <div class="modal-img-wrap">
+          <div class="modal-img">
+            <!-- Replace with: <img src="your-image.jpg" alt="Agent Portal Dashboard" /> -->
+            <div class="img-placeholder"><div class="img-placeholder-icon">⊞</div><div class="img-placeholder-label">Dashboard design</div></div>
+          </div>
+          <div class="modal-img-caption">Dashboard — prioritized activity feed</div>
+        </div>
+        <div class="modal-img-wrap">
+          <div class="modal-img">
+            <!-- Replace with: <img src="your-image.jpg" alt="Journey Map" /> -->
+            <div class="img-placeholder"><div class="img-placeholder-icon">◎</div><div class="img-placeholder-label">Journey map</div></div>
+          </div>
+          <div class="modal-img-caption">Agent journey mapping across 4 workflows</div>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">The Problem</div>
+        <p class="modal-section-text">Independent insurance agents were navigating a fragmented portal cobbled together from multiple disconnected systems. They'd submit an application, get no confirmation, then spend the rest of the day fielding client calls asking "where's my policy?" — with no good answer. <strong>Status visibility was invisible. Client data lived everywhere and nowhere.</strong></p>
+      </div>
+      <div class="modal-two-col">
+        <div>
+          <div class="modal-section-label">What We Did</div>
+          <div class="modal-pill-list">
+            <span class="modal-pill">Agent interviews</span>
+            <span class="modal-pill">Card sorting</span>
+            <span class="modal-pill">Journey mapping</span>
+            <span class="modal-pill">Dashboard strategy</span>
+            <span class="modal-pill">Systems analysis</span>
+            <span class="modal-pill">Stakeholder alignment</span>
+          </div>
+        </div>
+        <div>
+          <div class="modal-section-label">The Insight</div>
+          <p class="modal-section-text">Before designing anything, we mapped four core agent workflows and identified a single cross-cutting pain point: <strong>agents had no way to know what was happening with an application after they submitted it.</strong> Everything else — fragmented tools, manual re-entry, support call volume — cascaded from that one gap.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">Strategic Direction</div>
+        <p class="modal-section-text">Rather than redesigning screens, we reframed the problem around a unified client contact system and a prioritized activity feed — giving agents <strong>immediate visibility into what needs attention</strong> the moment they log in. The design direction connected directly to reducing inbound support calls and improving agent retention, giving leadership a business case, not just a design pitch.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-stockguard" onclick="closeModalOnOverlay(event, 'stockguard')">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-tags">
+          <span class="work-tag">UX Audit</span>
+          <span class="work-tag">UI Redesign</span>
+          <span class="work-tag">Web App</span>
+        </div>
+        <div class="modal-title">Stockguard Web App Redesign</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('stockguard')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-image-strip">
+        <div class="modal-img-wrap">
+          <div class="modal-img">
+            <!-- Replace with: <img src="your-image.jpg" alt="Before — original Stockguard app" /> -->
+            <div class="img-placeholder"><div class="img-placeholder-icon">◈</div><div class="img-placeholder-label">Before</div></div>
+          </div>
+          <div class="modal-img-caption">Before — original interface</div>
+        </div>
+        <div class="modal-img-wrap">
+          <div class="modal-img">
+            <!-- Replace with: <img src="your-image.jpg" alt="After — redesigned Stockguard app" /> -->
+            <div class="img-placeholder"><div class="img-placeholder-icon">✦</div><div class="img-placeholder-label">After</div></div>
+          </div>
+          <div class="modal-img-caption">After — redesigned experience</div>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">The Problem</div>
+        <p class="modal-section-text">Stockguard built a web app to modernize livestock insurance — eliminating the back-and-forth email chains needed to get a quote. The functionality worked. <strong>The experience didn't.</strong> The interface was bare-bones, navigation was unclear, and there was no coherent design system holding it together.</p>
+      </div>
+      <div class="modal-two-col">
+        <div>
+          <div class="modal-section-label">What We Did</div>
+          <div class="modal-pill-list">
+            <span class="modal-pill">UX audit</span>
+            <span class="modal-pill">Competitor analysis</span>
+            <span class="modal-pill">Wireframing</span>
+            <span class="modal-pill">High-fidelity redesign</span>
+            <span class="modal-pill">Design system</span>
+            <span class="modal-pill">Usability review</span>
+          </div>
+        </div>
+        <div>
+          <div class="modal-section-label">The Approach</div>
+          <p class="modal-section-text">This was a self-initiated redesign — no client brief, no stakeholder direction. <strong>Just a broken product and a better way forward.</strong> Audited the existing app, identified hierarchy and navigation failures, and redesigned with a scalable component system and clear user flows.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">The Outcome</div>
+        <p class="modal-section-text">Before-and-after visuals tell the story clearly: a product that once felt unfinished now communicates trust and ease. The redesign demonstrates how <strong>strategic design thinking — not just visual polish — transforms how a product performs</strong> in the hands of real users.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-lotslive" onclick="closeModalOnOverlay(event, 'lotslive')">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-tags">
+          <span class="work-tag">Mobile App</span>
+          <span class="work-tag">User Research</span>
+          <span class="work-tag">Prototyping</span>
+        </div>
+        <div class="modal-title">Lots Live — Real-Time Parking App</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('lotslive')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-image-strip">
+        <div class="modal-img-wrap">
+          <div class="modal-img">
+            <!-- Replace with: <img src="your-image.jpg" alt="Lots Live home screen" /> -->
+            <div class="img-placeholder"><div class="img-placeholder-icon">⊙</div><div class="img-placeholder-label">Home screen</div></div>
+          </div>
+          <div class="modal-img-caption">Home — real-time lot availability</div>
+        </div>
+        <div class="modal-img-wrap">
+          <div class="modal-img">
+            <!-- Replace with: <img src="your-image.jpg" alt="Lots Live reservation flow" /> -->
+            <div class="img-placeholder"><div class="img-placeholder-icon">⊞</div><div class="img-placeholder-label">Reservation flow</div></div>
+          </div>
+          <div class="modal-img-caption">Reservation — streamlined booking</div>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">The Problem</div>
+        <p class="modal-section-text">Students and faculty were arriving at campus parking lots only to find them full — wasting time, spiking stress, and causing missed classes. <strong>The uncertainty of not knowing was often worse than the problem itself.</strong> Existing parking apps didn't solve for real-time visibility or advance reservations in a campus context.</p>
+      </div>
+      <div class="modal-two-col">
+        <div>
+          <div class="modal-section-label">What We Did</div>
+          <div class="modal-pill-list">
+            <span class="modal-pill">User surveys</span>
+            <span class="modal-pill">Interviews</span>
+            <span class="modal-pill">Card sorting</span>
+            <span class="modal-pill">Personas</span>
+            <span class="modal-pill">Wireframing</span>
+            <span class="modal-pill">Usability testing</span>
+            <span class="modal-pill">High-fidelity prototype</span>
+          </div>
+        </div>
+        <div>
+          <div class="modal-section-label">The Insight</div>
+          <p class="modal-section-text">Research revealed that users didn't just want to find parking — they wanted to <strong>stop thinking about parking altogether.</strong> The design response was a minimal, real-time interface that surfaced availability and reservations front-and-center, removing every unnecessary step from the flow.</p>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">The Outcome</div>
+        <p class="modal-section-text">Usability testing showed reduced task completion time and significantly lower reported stress. Iterative refinement — adding back buttons, tightening visual consistency, smoothing screen transitions — <strong>turned a functional prototype into an experience users actually trusted.</strong></p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -684,37 +1190,42 @@
   <div class="services-grid fade-in">
     <div class="service-card featured">
       <div class="service-num">01</div>
-      <div class="service-icon">◈</div>
-      <div class="service-name">UX Strategy & Consulting</div>
-      <div class="service-desc">Big picture thinking about your product, your users, and where the gaps are. We help you figure out what to build — and what to stop building.</div>
+      <div class="service-body">
+        <div class="service-name">UX Strategy & Consulting</div>
+        <div class="service-desc">Big picture thinking about your product, your users, and where the gaps are. We help you figure out what to build — and what to stop building.</div>
+      </div>
       <span class="service-tag">Most popular</span>
     </div>
     <div class="service-card">
       <div class="service-num">02</div>
-      <div class="service-icon">⊙</div>
-      <div class="service-name">UX Audit</div>
-      <div class="service-desc">A deep-dive into your existing product. I identify friction, prioritize issues by business impact, and deliver a clear, actionable report.</div>
+      <div class="service-body">
+        <div class="service-name">UX Audit</div>
+        <div class="service-desc">A deep-dive into your existing product. We identify friction, prioritize issues by business impact, and deliver a clear, actionable report.</div>
+      </div>
       <span class="service-tag">Fixed scope</span>
     </div>
     <div class="service-card">
       <div class="service-num">03</div>
-      <div class="service-icon">◎</div>
-      <div class="service-name">User Research</div>
-      <div class="service-desc">Interviews, journey mapping, and synthesis that turns real user behavior into strategic insight your whole team can act on.</div>
+      <div class="service-body">
+        <div class="service-name">User Research</div>
+        <div class="service-desc">Interviews, journey mapping, and synthesis that turns real user behavior into strategic insight your whole team can act on.</div>
+      </div>
       <span class="service-tag">Evidence-based</span>
     </div>
     <div class="service-card">
       <div class="service-num">04</div>
-      <div class="service-icon">⊞</div>
-      <div class="service-name">Wireframing & Prototyping</div>
-      <div class="service-desc">Translating strategy into structure. Low and mid-fidelity wireframes that communicate flows and decisions — ready for your dev team.</div>
+      <div class="service-body">
+        <div class="service-name">Wireframing & Prototyping</div>
+        <div class="service-desc">Translating strategy into structure. Low and mid-fidelity wireframes that communicate flows and decisions — ready for your dev team.</div>
+      </div>
       <span class="service-tag">Strategy-led</span>
     </div>
     <div class="service-card">
       <div class="service-num">05</div>
-      <div class="service-icon">✦</div>
-      <div class="service-name">UI / Visual Design</div>
-      <div class="service-desc">High-fidelity design when you need it. Clean, intentional interfaces built on a strategic foundation — not just made to look good.</div>
+      <div class="service-body">
+        <div class="service-name">UI / Visual Design</div>
+        <div class="service-desc">High-fidelity design when you need it. Clean, intentional interfaces built on a strategic foundation — not just made to look good.</div>
+      </div>
       <span class="service-tag">Add-on</span>
     </div>
   </div>
@@ -865,7 +1376,26 @@
     });
   });
 
-  // Scroll fade-in
+  // Modal functions
+  function openModal(id) {
+    document.getElementById('modal-' + id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById('modal-' + id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeModalOnOverlay(e, id) {
+    if (e.target === document.getElementById('modal-' + id)) closeModal(id);
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.open').forEach(m => {
+        m.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    }
+  });
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
